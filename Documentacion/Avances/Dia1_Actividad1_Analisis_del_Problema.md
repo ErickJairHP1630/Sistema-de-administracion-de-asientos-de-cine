@@ -1,4 +1,4 @@
-# Día 1 – Actividad 1: Análisis del problema
+<!-- # Día 1 – Actividad 1: Análisis del problema  -->
 
 **Proyecto Integrador: Sistema de administración de asientos de cine**
 
