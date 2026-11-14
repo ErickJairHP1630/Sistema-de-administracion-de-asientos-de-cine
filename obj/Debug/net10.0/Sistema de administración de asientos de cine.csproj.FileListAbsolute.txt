@@ -1,0 +1,15 @@
+C:\Users\Erick\OneDrive\Documentos\Sistema de administración de asientos de cine\obj\Debug\net10.0\Sistema de administración de asientos de cine.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Erick\OneDrive\Documentos\Sistema de administración de asientos de cine\obj\Debug\net10.0\Sistema de administración de asientos de cine.AssemblyInfoInputs.cache
+C:\Users\Erick\OneDrive\Documentos\Sistema de administración de asientos de cine\obj\Debug\net10.0\Sistema de administración de asientos de cine.AssemblyInfo.cs
+C:\Users\Erick\OneDrive\Documentos\Sistema de administración de asientos de cine\obj\Debug\net10.0\Sistema de administración de asientos de cine.csproj.CoreCompileInputs.cache
+C:\Users\Erick\OneDrive\Documentos\Sistema de administración de asientos de cine\obj\Debug\net10.0\Sistema de administración de asientos de cine.sourcelink.json
+C:\Users\Erick\OneDrive\Documentos\Sistema de administración de asientos de cine\bin\Debug\net10.0\Sistema de administración de asientos de cine.exe
+C:\Users\Erick\OneDrive\Documentos\Sistema de administración de asientos de cine\bin\Debug\net10.0\Sistema de administración de asientos de cine.deps.json
+C:\Users\Erick\OneDrive\Documentos\Sistema de administración de asientos de cine\bin\Debug\net10.0\Sistema de administración de asientos de cine.runtimeconfig.json
+C:\Users\Erick\OneDrive\Documentos\Sistema de administración de asientos de cine\bin\Debug\net10.0\Sistema de administración de asientos de cine.dll
+C:\Users\Erick\OneDrive\Documentos\Sistema de administración de asientos de cine\bin\Debug\net10.0\Sistema de administración de asientos de cine.pdb
+C:\Users\Erick\OneDrive\Documentos\Sistema de administración de asientos de cine\obj\Debug\net10.0\Sistema de administración de asientos de cine.dll
+C:\Users\Erick\OneDrive\Documentos\Sistema de administración de asientos de cine\obj\Debug\net10.0\refint\Sistema de administración de asientos de cine.dll
+C:\Users\Erick\OneDrive\Documentos\Sistema de administración de asientos de cine\obj\Debug\net10.0\Sistema de administración de asientos de cine.pdb
+C:\Users\Erick\OneDrive\Documentos\Sistema de administración de asientos de cine\obj\Debug\net10.0\Sistema de administración de asientos de cine.genruntimeconfig.cache
+C:\Users\Erick\OneDrive\Documentos\Sistema de administración de asientos de cine\obj\Debug\net10.0\ref\Sistema de administración de asientos de cine.dll
