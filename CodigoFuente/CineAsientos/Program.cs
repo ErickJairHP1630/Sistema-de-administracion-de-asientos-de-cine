@@ -2,75 +2,82 @@
 
 namespace CineAsientos
 {
-    /// <summary>
-    /// Programa principal: crea la sala, muestra el menú
-    /// y envía cada opción al módulo correspondiente.
-    /// </summary>
     class Program
     {
-        // Dimensiones de la sala y estados de un asiento
-        public const int FILAS = 5;
-        public const int COLUMNAS = 8;
-        public const int LIBRE = 0;
-        public const int OCUPADO = 1;
+        // Tamaño de la sala y estado de los asientos
+        const int FILAS = 5;
+        const int COLUMNAS = 8;
+        const int LIBRE = 0;
+        const int OCUPADO = 1;
 
-        static void Main(string[] args)
+        static void Main()
         {
-            // La sala es una matriz (arreglo bidimensional) de FILAS x COLUMNAS
-            int[,] sala = new int[FILAS, COLUMNAS];
-            InicializarSala(sala);
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            int opcion;
-            do
+            // La sala es una matriz: 0 = libre, 1 = ocupado
+            int[,] sala = new int[FILAS, COLUMNAS];
+
+            // Al inicio todos los asientos están libres
+            for (int f = 0; f < FILAS; f++)
+            {
+                for (int c = 0; c < COLUMNAS; c++)
+                {
+                    sala[f, c] = LIBRE;
+                }
+            }
+
+            int opcion = 0;
+
+            while (opcion != 6)
             {
                 MostrarMenu();
-                opcion = LeerOpcion();
 
-                switch (opcion)
+                // Si no escribe un número, opcion queda en 0 y será inválida
+                if (!int.TryParse(Console.ReadLine(), out opcion))
                 {
-                    case 1:
-                        MostrarSala(sala);
-                        break;
-                    case 2:
-                        Captura.ReservarAsiento(sala);
-                        break;
-                    case 3:
-                        Captura.LiberarAsiento(sala);
-                        break;
-                    case 4:
-                        Console.WriteLine("Consultar disponibilidad: pendiente (Día 5).");
-                        break;
-                    case 5:
-                        Console.WriteLine("Estadísticas: pendiente (Día 6).");
-                        break;
-                    case 6:
-                        Console.WriteLine("Gracias por usar el sistema. ¡Hasta luego!");
-                        break;
-                    default:
-                        Console.WriteLine("Opción inválida. Elija un número del 1 al 6.");
-                        break;
+                    opcion = 0;
+                }
+
+                if (opcion == 1)
+                {
+                    MostrarSala(sala);
+                }
+                else if (opcion == 2)
+                {
+                    ReservarAsiento(sala);
+                }
+                else if (opcion == 3)
+                {
+                    LiberarAsiento(sala);
+                }
+                else if (opcion == 4)
+                {
+                    ConsultarAsiento(sala);
+                }
+                else if (opcion == 5)
+                {
+                    Console.WriteLine("Estadísticas: pendiente (Día 6).");
+                }
+                else if (opcion == 6)
+                {
+                    Console.WriteLine("Gracias por usar el sistema. ¡Hasta luego!");
+                }
+                else
+                {
+                    Console.WriteLine("Opción inválida. Elija un número del 1 al 6.");
                 }
 
                 if (opcion != 6)
                 {
-                    Pausar();
-                }
-            } while (opcion != 6);
-        }
-
-        /// <summary>Recorre la matriz y marca todos los asientos como libres.</summary>
-        static void InicializarSala(int[,] sala)
-        {
-            for (int fila = 0; fila < FILAS; fila++)
-            {
-                for (int columna = 0; columna < COLUMNAS; columna++)
-                {
-                    sala[fila, columna] = LIBRE;
+                    Console.WriteLine();
+                    Console.WriteLine("Presione Enter para volver al menú...");
+                    Console.ReadLine();
                 }
             }
         }
 
-        /// <summary>Imprime el menú principal.</summary>
+        // ---------- MENÚ ----------
+
         static void MostrarMenu()
         {
             Console.Clear();
@@ -88,46 +95,31 @@ namespace CineAsientos
             Console.Write("Seleccione una opción (1-6): ");
         }
 
-        /// <summary>
-        /// Lee la opción del menú. Si el usuario escribe algo que no es número,
-        /// devuelve -1 para que el switch lo trate como opción inválida.
-        /// </summary>
-        static int LeerOpcion()
-        {
-            string entrada = Console.ReadLine();
+        // ---------- MOSTRAR LA SALA ----------
 
-            if (int.TryParse(entrada, out int opcion))
-            {
-                return opcion;
-            }
-
-            return -1;
-        }
-
-        /// <summary>Recorre la matriz e imprime cada asiento como [ ] libre o [X] ocupado.</summary>
-        public static void MostrarSala(int[,] sala)
+        static void MostrarSala(int[,] sala)
         {
             Console.WriteLine();
             Console.WriteLine("============== PANTALLA ==============");
             Console.WriteLine();
 
-            // Encabezado con los números de columna
+            // Números de las columnas
             Console.Write("     ");
-            for (int columna = 1; columna <= COLUMNAS; columna++)
+            for (int c = 1; c <= COLUMNAS; c++)
             {
-                Console.Write($" {columna}  ");
+                Console.Write(" " + c + "  ");
             }
             Console.WriteLine();
 
-            // Una línea por fila, con su letra al inicio
-            for (int fila = 0; fila < FILAS; fila++)
+            // Cada fila con su letra
+            for (int f = 0; f < FILAS; f++)
             {
-                char letraFila = (char)('A' + fila);
-                Console.Write($"  {letraFila}  ");
+                char letra = (char)('A' + f);
+                Console.Write("  " + letra + "  ");
 
-                for (int columna = 0; columna < COLUMNAS; columna++)
+                for (int c = 0; c < COLUMNAS; c++)
                 {
-                    if (sala[fila, columna] == LIBRE)
+                    if (sala[f, c] == LIBRE)
                     {
                         Console.Write("[ ] ");
                     }
@@ -143,144 +135,147 @@ namespace CineAsientos
             Console.WriteLine("  [ ] Libre    [X] Ocupado");
         }
 
-        /// <summary>Espera a que el usuario presione Enter antes de volver al menú.</summary>
-        public static void Pausar()
-        {
-            Console.WriteLine();
-            Console.WriteLine("Presione Enter para volver al menú...");
-            Console.ReadLine();
-        }
-    }
+        // ---------- LEER FILA Y COLUMNA ----------
 
-    /// <summary>
-    /// Módulo de captura: lee y valida la posición de un asiento,
-    /// y realiza las operaciones de reservar y liberar sobre la matriz.
-    /// </summary>
-    static class Captura
-    {
-        /// <summary>
-        /// Pide al usuario la fila (letra A-E) y la columna (número 1-8).
-        /// Convierte la letra a índice (A=0...E=4) y la columna a índice (1=0...8=7).
-        /// Devuelve true si ambos datos son válidos; si no, muestra el error y devuelve false.
-        /// </summary>
-        public static bool LeerPosicion(out int fila, out int columna)
+        // Pide la fila (A-E). Devuelve 0 a 4, o -1 si es inválida
+        static int LeerFila()
         {
-            fila = -1;
-            columna = -1;
-
-            // --- Fila ---
             Console.Write("Ingrese la fila (A-E): ");
-            string entradaFila = Console.ReadLine();
+            string texto = Console.ReadLine();
 
-            if (string.IsNullOrWhiteSpace(entradaFila))
+            if (string.IsNullOrWhiteSpace(texto))
             {
                 Console.WriteLine("No ingresó ningún dato. Intente de nuevo.");
-                return false;
+                return -1;
             }
 
-            entradaFila = entradaFila.Trim().ToUpper();
-            char letra = entradaFila[0];
+            texto = texto.Trim().ToUpper();
 
-            if (entradaFila.Length != 1 || letra < 'A' || letra >= 'A' + Program.FILAS)
+            if (texto.Length != 1 || texto[0] < 'A' || texto[0] > 'E')
             {
                 Console.WriteLine("Fila inválida. Use una letra de la A a la E.");
-                return false;
+                return -1;
             }
 
-            fila = letra - 'A';
+            // A = 0, B = 1, C = 2, D = 3, E = 4
+            return texto[0] - 'A';
+        }
 
-            // --- Columna ---
+        // Pide la columna (1-8). Devuelve 0 a 7, o -1 si es inválida
+        static int LeerColumna()
+        {
             Console.Write("Ingrese la columna (1-8): ");
-            string entradaColumna = Console.ReadLine();
+            string texto = Console.ReadLine();
 
-            if (string.IsNullOrWhiteSpace(entradaColumna))
+            if (string.IsNullOrWhiteSpace(texto))
             {
                 Console.WriteLine("No ingresó ningún dato. Intente de nuevo.");
-                return false;
+                return -1;
             }
 
-            if (!int.TryParse(entradaColumna, out int numeroColumna))
+            int numero;
+            if (!int.TryParse(texto, out numero) || numero < 1 || numero > COLUMNAS)
             {
                 Console.WriteLine("Columna inválida. Use un número del 1 al 8.");
-                return false;
+                return -1;
             }
 
-            columna = numeroColumna - 1;
-
-            if (!ValidarPosicion(fila, columna))
-            {
-                Console.WriteLine("Columna inválida. Use un número del 1 al 8.");
-                return false;
-            }
-
-            return true;
+            // La columna 1 es la posición 0 de la matriz
+            return numero - 1;
         }
 
-        /// <summary>Comprueba que los índices estén dentro del rango de la matriz.</summary>
-        public static bool ValidarPosicion(int fila, int columna)
-        {
-            return fila >= 0 && fila < Program.FILAS
-                && columna >= 0 && columna < Program.COLUMNAS;
-        }
+        // ---------- RESERVAR ----------
 
-        /// <summary>Devuelve el nombre del asiento como lo ve el usuario, por ejemplo "B4".</summary>
-        public static string NombreAsiento(int fila, int columna)
-        {
-            char letra = (char)('A' + fila);
-            return $"{letra}{columna + 1}";
-        }
-
-        /// <summary>
-        /// Reserva un asiento: valida la posición, verifica que esté libre
-        /// y lo marca como ocupado (inserción en la matriz).
-        /// </summary>
-        public static void ReservarAsiento(int[,] sala)
+        static void ReservarAsiento(int[,] sala)
         {
             Console.WriteLine();
             Console.WriteLine("----------- RESERVAR ASIENTO -----------");
 
-            if (!LeerPosicion(out int fila, out int columna))
-            {
-                return; // El mensaje de error ya se mostró en LeerPosicion
-            }
-
-            string asiento = NombreAsiento(fila, columna);
-
-            if (sala[fila, columna] == Program.OCUPADO)
-            {
-                Console.WriteLine($"El asiento {asiento} ya está ocupado. Elija otro.");
-            }
-            else
-            {
-                sala[fila, columna] = Program.OCUPADO;
-                Console.WriteLine($"Reservación exitosa: asiento {asiento} ocupado.");
-            }
-        }
-
-        /// <summary>
-        /// Libera un asiento: valida la posición, verifica que esté ocupado
-        /// y lo marca como libre (eliminación lógica en la matriz).
-        /// </summary>
-        public static void LiberarAsiento(int[,] sala)
-        {
-            Console.WriteLine();
-            Console.WriteLine("----------- LIBERAR ASIENTO -----------");
-
-            if (!LeerPosicion(out int fila, out int columna))
+            int fila = LeerFila();
+            if (fila == -1)
             {
                 return;
             }
 
-            string asiento = NombreAsiento(fila, columna);
-
-            if (sala[fila, columna] == Program.LIBRE)
+            int columna = LeerColumna();
+            if (columna == -1)
             {
-                Console.WriteLine($"El asiento {asiento} ya estaba libre. No había reservación.");
+                return;
+            }
+
+            string nombre = "" + (char)('A' + fila) + (columna + 1);
+
+            if (sala[fila, columna] == OCUPADO)
+            {
+                Console.WriteLine("El asiento " + nombre + " ya está ocupado. Elija otro.");
             }
             else
             {
-                sala[fila, columna] = Program.LIBRE;
-                Console.WriteLine($"Asiento {asiento} liberado correctamente.");
+                sala[fila, columna] = OCUPADO;
+                Console.WriteLine("Reservación exitosa: asiento " + nombre + " ocupado.");
+            }
+        }
+
+        // ---------- LIBERAR ----------
+
+        static void LiberarAsiento(int[,] sala)
+        {
+            Console.WriteLine();
+            Console.WriteLine("----------- LIBERAR ASIENTO -----------");
+
+            int fila = LeerFila();
+            if (fila == -1)
+            {
+                return;
+            }
+
+            int columna = LeerColumna();
+            if (columna == -1)
+            {
+                return;
+            }
+
+            string nombre = "" + (char)('A' + fila) + (columna + 1);
+
+            if (sala[fila, columna] == LIBRE)
+            {
+                Console.WriteLine("El asiento " + nombre + " ya estaba libre. No había reservación.");
+            }
+            else
+            {
+                sala[fila, columna] = LIBRE;
+                Console.WriteLine("Asiento " + nombre + " liberado correctamente.");
+            }
+        }
+
+        // ---------- CONSULTAR DISPONIBILIDAD (DÍA 5) ----------
+
+        static void ConsultarAsiento(int[,] sala)
+        {
+            Console.WriteLine();
+            Console.WriteLine("-------- CONSULTAR DISPONIBILIDAD --------");
+
+            int fila = LeerFila();
+            if (fila == -1)
+            {
+                return;
+            }
+
+            int columna = LeerColumna();
+            if (columna == -1)
+            {
+                return;
+            }
+
+            string nombre = "" + (char)('A' + fila) + (columna + 1);
+
+            if (sala[fila, columna] == LIBRE)
+            {
+                Console.WriteLine("El asiento " + nombre + " está DISPONIBLE.");
+            }
+            else
+            {
+                Console.WriteLine("El asiento " + nombre + " está OCUPADO.");
             }
         }
     }
