@@ -301,3 +301,5 @@ namespace CineAsientos
         }
     }
 }
+
+// Dia 6: Estadísticas de ocupación (pendiente)
