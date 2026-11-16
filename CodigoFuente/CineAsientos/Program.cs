@@ -278,5 +278,26 @@ namespace CineAsientos
                 Console.WriteLine("El asiento " + nombre + " está OCUPADO.");
             }
         }
+
+        // ---------- ESTADÍSTICAS (DÍA 6) ----------
+
+        // Mi parte Erick - Revisa todos los asientos y cuenta cuántos están ocupados
+        static int ContarOcupados(int[,] sala)
+        {
+            int ocupados = 0;
+
+            for (int f = 0; f < FILAS; f++)
+            {
+                for (int c = 0; c < COLUMNAS; c++)
+                {
+                    if (sala[f, c] == OCUPADO)
+                    {
+                        ocupados = ocupados + 1;
+                    }
+                }
+            }
+
+            return ocupados;
+        }
     }
 }

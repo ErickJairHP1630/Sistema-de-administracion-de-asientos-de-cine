@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Sistema de administración de asientos de cine")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d985c371cf60597a38a7821acce261ffd09fae76")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a803bbd7054860e2549391aea7235a21c8d208cd")]
 [assembly: System.Reflection.AssemblyProductAttribute("Sistema de administración de asientos de cine")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Sistema de administración de asientos de cine")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
