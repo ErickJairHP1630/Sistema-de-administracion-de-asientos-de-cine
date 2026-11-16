@@ -1,64 +1,58 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CineAsientos
 {
     class Program
     {
-        // Tamaño de la sala y estado de los asientos
-        const int FILAS = 5;
-        const int COLUMNAS = 8;
-        const int LIBRE = 0;
-        const int OCUPADO = 1;
+        // Listas con las filas y columnas válidas (se usan para validar con IndexOf)
+        static List<string> letrasFila = new List<string> { "A", "B", "C", "D", "E" };
+        static List<string> numerosColumna = new List<string> { "1", "2", "3", "4", "5", "6", "7", "8" };
 
         static void Main()
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            // La sala es una matriz: 0 = libre, 1 = ocupado
-            int[,] sala = new int[FILAS, COLUMNAS];
+            // La sala es una matriz de asientos: cada asiento tiene nombre y estado
+            Asiento[,] sala = new Asiento[letrasFila.Count, numerosColumna.Count];
 
             // Al inicio todos los asientos están libres
-            for (int f = 0; f < FILAS; f++)
+            for (int f = 0; f < letrasFila.Count; f++)
             {
-                for (int c = 0; c < COLUMNAS; c++)
+                for (int c = 0; c < numerosColumna.Count; c++)
                 {
-                    sala[f, c] = LIBRE;
+                    sala[f, c] = new Asiento() { Nombre = letrasFila[f] + numerosColumna[c], Ocupado = false };
                 }
             }
 
-            int opcion = 0;
+            string opcion = "";
 
-            while (opcion != 6)
+            while (opcion != "6")
             {
                 MostrarMenu();
+                opcion = Console.ReadLine();
 
-                // Si no escribe un número, opcion queda en 0 y será inválida
-                if (!int.TryParse(Console.ReadLine(), out opcion))
-                {
-                    opcion = 0;
-                }
-
-                if (opcion == 1)
+                if (opcion == "1")
                 {
                     MostrarSala(sala);
                 }
-                else if (opcion == 2)
+                else if (opcion == "2")
                 {
                     ReservarAsiento(sala);
                 }
-                else if (opcion == 3)
+                else if (opcion == "3")
                 {
                     LiberarAsiento(sala);
                 }
-                else if (opcion == 4)
+                else if (opcion == "4")
                 {
                     ConsultarAsiento(sala);
                 }
-                else if (opcion == 5)
+                else if (opcion == "5")
                 {
                     MostrarEstadisticas(sala);
                 }
-                else if (opcion == 6)
+                else if (opcion == "6")
                 {
                     Console.WriteLine("Gracias por usar el sistema. ¡Hasta luego!");
                 }
@@ -67,7 +61,7 @@ namespace CineAsientos
                     Console.WriteLine("Opción inválida. Elija un número del 1 al 6.");
                 }
 
-                if (opcion != 6)
+                if (opcion != "6")
                 {
                     Console.WriteLine();
                     Console.WriteLine("Presione Enter para volver al menú...");
@@ -97,7 +91,7 @@ namespace CineAsientos
 
         // ---------- MOSTRAR LA SALA ----------
 
-        static void MostrarSala(int[,] sala)
+        static void MostrarSala(Asiento[,] sala)
         {
             Console.WriteLine();
             Console.WriteLine("============== PANTALLA ==============");
@@ -105,27 +99,26 @@ namespace CineAsientos
 
             // Números de las columnas
             Console.Write("     ");
-            for (int c = 1; c <= COLUMNAS; c++)
+            foreach (var numero in numerosColumna)
             {
-                Console.Write(" " + c + "  ");
+                Console.Write($" {numero}  ");
             }
             Console.WriteLine();
 
             // Cada fila con su letra
-            for (int f = 0; f < FILAS; f++)
+            for (int f = 0; f < letrasFila.Count; f++)
             {
-                char letra = (char)('A' + f);
-                Console.Write("  " + letra + "  ");
+                Console.Write($"  {letrasFila[f]}  ");
 
-                for (int c = 0; c < COLUMNAS; c++)
+                for (int c = 0; c < numerosColumna.Count; c++)
                 {
-                    if (sala[f, c] == LIBRE)
+                    if (sala[f, c].Ocupado)
                     {
-                        Console.Write("[ ] ");
+                        Console.Write("[X] ");
                     }
                     else
                     {
-                        Console.Write("[X] ");
+                        Console.Write("[ ] ");
                     }
                 }
                 Console.WriteLine();
@@ -143,22 +136,21 @@ namespace CineAsientos
             Console.Write("Ingrese la fila (A-E): ");
             string texto = Console.ReadLine();
 
-            if (string.IsNullOrWhiteSpace(texto))
+            if (texto == "")
             {
                 Console.WriteLine("No ingresó ningún dato. Intente de nuevo.");
                 return -1;
             }
 
-            texto = texto.Trim().ToUpper();
+            // IndexOf busca la letra en la lista y devuelve su posición (-1 si no está)
+            int fila = letrasFila.IndexOf(texto.ToUpper());
 
-            if (texto.Length != 1 || texto[0] < 'A' || texto[0] > 'E')
+            if (fila == -1)
             {
                 Console.WriteLine("Fila inválida. Use una letra de la A a la E.");
-                return -1;
             }
 
-            // A = 0, B = 1, C = 2, D = 3, E = 4
-            return texto[0] - 'A';
+            return fila;
         }
 
         // Pide la columna (1-8). Devuelve 0 a 7, o -1 si es inválida
@@ -167,26 +159,26 @@ namespace CineAsientos
             Console.Write("Ingrese la columna (1-8): ");
             string texto = Console.ReadLine();
 
-            if (string.IsNullOrWhiteSpace(texto))
+            if (texto == "")
             {
                 Console.WriteLine("No ingresó ningún dato. Intente de nuevo.");
                 return -1;
             }
 
-            int numero;
-            if (!int.TryParse(texto, out numero) || numero < 1 || numero > COLUMNAS)
+            // IndexOf busca el número en la lista y devuelve su posición (-1 si no está)
+            int columna = numerosColumna.IndexOf(texto);
+
+            if (columna == -1)
             {
                 Console.WriteLine("Columna inválida. Use un número del 1 al 8.");
-                return -1;
             }
 
-            // La columna 1 es la posición 0 de la matriz
-            return numero - 1;
+            return columna;
         }
 
         // ---------- RESERVAR ----------
 
-        static void ReservarAsiento(int[,] sala)
+        static void ReservarAsiento(Asiento[,] sala)
         {
             Console.WriteLine();
             Console.WriteLine("----------- RESERVAR ASIENTO -----------");
@@ -203,22 +195,22 @@ namespace CineAsientos
                 return;
             }
 
-            string nombre = "" + (char)('A' + fila) + (columna + 1);
+            var asiento = sala[fila, columna];
 
-            if (sala[fila, columna] == OCUPADO)
+            if (asiento.Ocupado)
             {
-                Console.WriteLine("El asiento " + nombre + " ya está ocupado. Elija otro.");
+                Console.WriteLine($"El asiento {asiento.Nombre} ya está ocupado. Elija otro.");
             }
             else
             {
-                sala[fila, columna] = OCUPADO;
-                Console.WriteLine("Reservación exitosa: asiento " + nombre + " ocupado.");
+                asiento.Ocupado = true;
+                Console.WriteLine($"Reservación exitosa: asiento {asiento.Nombre} ocupado.");
             }
         }
 
         // ---------- LIBERAR ----------
 
-        static void LiberarAsiento(int[,] sala)
+        static void LiberarAsiento(Asiento[,] sala)
         {
             Console.WriteLine();
             Console.WriteLine("----------- LIBERAR ASIENTO -----------");
@@ -235,22 +227,22 @@ namespace CineAsientos
                 return;
             }
 
-            string nombre = "" + (char)('A' + fila) + (columna + 1);
+            var asiento = sala[fila, columna];
 
-            if (sala[fila, columna] == LIBRE)
+            if (asiento.Ocupado)
             {
-                Console.WriteLine("El asiento " + nombre + " ya estaba libre. No había reservación.");
+                asiento.Ocupado = false;
+                Console.WriteLine($"Asiento {asiento.Nombre} liberado correctamente.");
             }
             else
             {
-                sala[fila, columna] = LIBRE;
-                Console.WriteLine("Asiento " + nombre + " liberado correctamente.");
+                Console.WriteLine($"El asiento {asiento.Nombre} ya estaba libre. No había reservación.");
             }
         }
 
         // ---------- CONSULTAR DISPONIBILIDAD (DÍA 5) ----------
 
-        static void ConsultarAsiento(int[,] sala)
+        static void ConsultarAsiento(Asiento[,] sala)
         {
             Console.WriteLine();
             Console.WriteLine("-------- CONSULTAR DISPONIBILIDAD --------");
@@ -267,33 +259,30 @@ namespace CineAsientos
                 return;
             }
 
-            string nombre = "" + (char)('A' + fila) + (columna + 1);
+            var asiento = sala[fila, columna];
 
-            if (sala[fila, columna] == LIBRE)
+            if (asiento.Ocupado)
             {
-                Console.WriteLine("El asiento " + nombre + " está DISPONIBLE.");
+                Console.WriteLine($"El asiento {asiento.Nombre} está OCUPADO.");
             }
             else
             {
-                Console.WriteLine("El asiento " + nombre + " está OCUPADO.");
+                Console.WriteLine($"El asiento {asiento.Nombre} está DISPONIBLE.");
             }
         }
 
         // ---------- ESTADÍSTICAS (DÍA 6) ----------
 
-          // Mi parte Erick - Revisa todos los asientos y cuenta cuántos están ocupados
-        static int ContarOcupados(int[,] sala)
+        // Mi parte Erick - Revisa todos los asientos y cuenta cuántos están ocupados
+        static int ContarOcupados(Asiento[,] sala)
         {
             int ocupados = 0;
 
-            for (int f = 0; f < FILAS; f++)
+            foreach (var asiento in sala)
             {
-                for (int c = 0; c < COLUMNAS; c++)
+                if (asiento.Ocupado)
                 {
-                    if (sala[f, c] == OCUPADO)
-                    {
-                        ocupados = ocupados + 1;
-                    }
+                    ocupados = ocupados + 1;
                 }
             }
 
@@ -302,20 +291,27 @@ namespace CineAsientos
 
         // Mi parte-carlos
         // Muestra el total, los ocupados, los disponibles y el porcentaje
-        static void MostrarEstadisticas(int[,] sala)
+        static void MostrarEstadisticas(Asiento[,] sala)
         {
             Console.WriteLine();
             Console.WriteLine("----------- ESTADÍSTICAS DE OCUPACIÓN -----------");
 
-            int total = FILAS * COLUMNAS;
+            int total = letrasFila.Count * numerosColumna.Count;
             int ocupados = ContarOcupados(sala);
             int disponibles = total - ocupados;
             double porcentaje = ocupados * 100.0 / total;
 
-            Console.WriteLine("Total de asientos:        " + total);
-            Console.WriteLine("Asientos ocupados:        " + ocupados);
-            Console.WriteLine("Asientos disponibles:     " + disponibles);
-            Console.WriteLine("Porcentaje de ocupación:  " + porcentaje + " %");
+            Console.WriteLine($"Total de asientos:        {total}");
+            Console.WriteLine($"Asientos ocupados:        {ocupados}");
+            Console.WriteLine($"Asientos disponibles:     {disponibles}");
+            Console.WriteLine($"Porcentaje de ocupación:  {porcentaje} %");
         }
+    }
+
+    // Un asiento de la sala (propiedades, como la clase Galaxias de la clase)
+    class Asiento
+    {
+        public string Nombre { get; set; }
+        public bool Ocupado { get; set; }
     }
 }
