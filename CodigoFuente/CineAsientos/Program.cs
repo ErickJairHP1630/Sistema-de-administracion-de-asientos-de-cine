@@ -56,7 +56,7 @@ namespace CineAsientos
                 }
                 else if (opcion == 5)
                 {
-                    Console.WriteLine("Estadísticas: pendiente (Día 6).");
+                    MostrarEstadisticas(sala);
                 }
                 else if (opcion == 6)
                 {
@@ -281,7 +281,7 @@ namespace CineAsientos
 
         // ---------- ESTADÍSTICAS (DÍA 6) ----------
 
-        // Mi parte Erick - Revisa todos los asientos y cuenta cuántos están ocupados
+          // Mi parte Erick - Revisa todos los asientos y cuenta cuántos están ocupados
         static int ContarOcupados(int[,] sala)
         {
             int ocupados = 0;
@@ -299,7 +299,23 @@ namespace CineAsientos
 
             return ocupados;
         }
+
+        // Mi parte-carlos
+        // Muestra el total, los ocupados, los disponibles y el porcentaje
+        static void MostrarEstadisticas(int[,] sala)
+        {
+            Console.WriteLine();
+            Console.WriteLine("----------- ESTADÍSTICAS DE OCUPACIÓN -----------");
+
+            int total = FILAS * COLUMNAS;
+            int ocupados = ContarOcupados(sala);
+            int disponibles = total - ocupados;
+            double porcentaje = ocupados * 100.0 / total;
+
+            Console.WriteLine("Total de asientos:        " + total);
+            Console.WriteLine("Asientos ocupados:        " + ocupados);
+            Console.WriteLine("Asientos disponibles:     " + disponibles);
+            Console.WriteLine("Porcentaje de ocupación:  " + porcentaje + " %");
+        }
     }
 }
-
-// Dia 6: Estadísticas de ocupación (pendiente)
